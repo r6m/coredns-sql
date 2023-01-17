@@ -1,24 +1,22 @@
 ---
-title: "pdsql"
-description: "*pdsql* use powerdns generic sql as backend."
+title: "sql"
+description: "*sql* use sql as backend."
 weight: 10
-tags: [  "plugin" , "pdsql" ]
+tags: [  "plugin" , "sql" ]
 categories: [ "plugin", "external" ]
 date: "2017-12-09T10:26:00+08:00"
 repo: "https://github.com/r6m/coredns-sql"
 home: "https://github.com/r6m/coredns-sql/blob/master/README.md"
 ---
 
-# pdsql
-
-*pdsql* use PowerDNS [generic sql](https://github.com/PowerDNS/pdns/tree/master/pdns/backends/gsql) as backend.
+# sql
 
 Use [jinzhu/gorm](https://github.com/jinzhu/gorm) to handle database, support many database as gorm dose.
 
 ## Syntax
 
 ~~~ txt
-pdsql <dialect> <arg> {
+sql <dialect> <arg> {
     # enable debug mode
     debug [db]
     # create table for test
@@ -28,14 +26,14 @@ pdsql <dialect> <arg> {
 
 ## Install Driver
 
-pdsql need db driver for dialect, to install a driver you need to add import in plugin.cfg, like
+sql need db driver for dialect, to install a driver you need to add import in plugin.cfg, like
 
 ~~~ txt
-pdsql_mysql:github.com/jinzhu/gorm/dialects/mysql
-pdsql_sqlite:github.com/jinzhu/gorm/dialects/sqlite
+sql_mysql:github.com/jinzhu/gorm/dialects/mysql
+sql_sqlite:github.com/jinzhu/gorm/dialects/sqlite
 ~~~
 
-pdsql_mysql and pdsql_sqlite are meaningless, choose to prevent duplicated.
+sql_mysql and sql_sqlite are meaningless, choose to prevent duplicated.
 
 ## Examples
 
@@ -43,7 +41,7 @@ Start a server on the 1053 port, use test.db as backend.
 
 ~~~ corefile
 test.:1053 {
-    pdsql sqlite3 ./test.db {
+    sql sqlite3 ./test.db {
         debug db
         auto-migrate
     }
