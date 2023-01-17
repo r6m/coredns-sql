@@ -67,9 +67,19 @@ func TestPowerDNSSQL(t *testing.T) {
 		}
 
 		for i, expected := range tc.expectedReply {
-			actual := rec.Msg.Answer[i].Header().Name
-			if actual != expected {
+			actual := rec.Msg.Answer[i]
+			if actual.Header().Name != expected {
 				t.Errorf("Test %d: Expected answer %s, but got %s", i, expected, actual)
+			}
+			if actual.Header().Rrtype != tc.qtype {
+				t.Errorf("Test %d: Expected answer type %s, but got %s", i, dns.TypeToString[tc.qtype], dns.TypeToString[actual.Header().Rrtype])
+			}
+
+			if actual.Header().Rrtype == tc.qtype {
+				answer := actual.(*dns.A)
+				if answer.A.String() != "192.168.1.1" {
+					t.Errorf("Test %d: Expected answer content %s, but got %s", i, "192.168.1.1", answer.A.String())
+				}
 			}
 		}
 	}
