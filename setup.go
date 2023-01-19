@@ -17,7 +17,7 @@ func init() {
 }
 
 func setup(c *caddy.Controller) error {
-	backend := SQL{}
+	backend := &SQL{}
 	c.Next()
 	if !c.NextArg() {
 		return plugin.Error(pluginName, c.ArgErr())

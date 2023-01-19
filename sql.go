@@ -20,8 +20,8 @@ type SQL struct {
 	Next  plugin.Handler
 }
 
-func (sql SQL) Name() string { return pluginName }
-func (sql SQL) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
+func (sql *SQL) Name() string { return pluginName }
+func (sql *SQL) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	state := request.Request{W: w, Req: r}
 
 	a := new(dns.Msg)
@@ -133,7 +133,7 @@ func (sql SQL) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (
 	return 0, w.WriteMsg(a)
 }
 
-func (sql SQL) SearchWildcard(qname string, qtype uint16) (redords []*Record, err error) {
+func (sql *SQL) SearchWildcard(qname string, qtype uint16) (redords []*Record, err error) {
 	// find domain, then find matched sub domain
 	name := qname
 	qnameNoDot := qname[:len(qname)-1]
