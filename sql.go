@@ -1,6 +1,7 @@
 package sql
 
 import (
+	"log"
 	"net"
 	"strconv"
 	"strings"
@@ -23,6 +24,10 @@ type SQL struct {
 func (sql *SQL) Name() string { return pluginName }
 func (sql *SQL) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	state := request.Request{W: w, Req: r}
+
+	if sql.Debug {
+		log.Printf("[DEBUG] SQL: %s %s\n", dns.TypeToString[state.QType()], state.QName())
+	}
 
 	a := new(dns.Msg)
 	a.SetReply(r)
