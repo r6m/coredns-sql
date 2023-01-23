@@ -4,27 +4,30 @@ import (
 	"testing"
 
 	sql "github.com/r6m/coredns-sql"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 
 	"github.com/coredns/coredns/plugin/pkg/dnstest"
 	"github.com/coredns/coredns/plugin/test"
 
-	"github.com/jinzhu/gorm"
 	"github.com/miekg/dns"
 	"golang.org/x/net/context"
 )
 
 func TestPowerDNSSQL(t *testing.T) {
-	db, err := gorm.Open("sqlite3", ":memory:")
+
+	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"))
 	if err != nil {
+		t.Log("can't connect to db")
 		t.Fatal(err)
 	}
 
-	p := sql.SQL{DB: db.Debug()}
-	if err := p.AutoMigrate(); err != nil {
+	s := sql.SQL{DB: db.Debug()}
+	if err := s.Migrate(); err != nil {
 		t.Fatal(err)
 	}
 
-	p.DB.Create(&sql.Record{
+	s.DB.Create(&sql.Record{
 		Name:    "example.org",
 		Type:    "A",
 		Content: "192.168.1.1",
@@ -54,7 +57,7 @@ func TestPowerDNSSQL(t *testing.T) {
 		req.SetQuestion(dns.Fqdn(tc.qname), tc.qtype)
 
 		rec := dnstest.NewRecorder(&test.ResponseWriter{})
-		code, err := p.ServeDNS(ctx, rec, req)
+		code, err := s.ServeDNS(ctx, rec, req)
 
 		if err != tc.expectedErr {
 			t.Errorf("Test %d: Expected error %v, but got %v", i, tc.expectedErr, err)

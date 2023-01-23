@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/coredns/caddy"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "gorm.io/driver/sqlite"
 )
 
 func TestSetupSql(t *testing.T) {
@@ -21,7 +21,16 @@ func TestSetupSql(t *testing.T) {
 
 	c = caddy.NewTestController("dns", `sql sqlite3 :memory: {
 debug db
-auto-migrate
+auto_migrate
+}`)
+	if err := setup(c); err != nil {
+		t.Fatalf("Expected no errors, but got: %v", err)
+	}
+
+	c = caddy.NewTestController("dns", `sql sqlite3 :memory: {
+debug
+table_prefix dns_
+auto_migrate
 }`)
 	if err := setup(c); err != nil {
 		t.Fatalf("Expected no errors, but got: %v", err)
@@ -55,7 +64,7 @@ debug
 	}
 
 	c = caddy.NewTestController("dns", `sql sqlite3 :memory: {
-auto-migrate invalid
+auto_migrate invalid
 }`)
 	if err := setup(c); err == nil {
 		t.Fatalf("Expected errors, but got: %v", err)
