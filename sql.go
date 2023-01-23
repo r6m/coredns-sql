@@ -105,10 +105,10 @@ func (sql *SQL) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) 
 			case *dns.MX:
 				rr.Hdr = hrd
 				rr.Mx = v.Content
-				rr.Preference = uint16(v.Prio)
+				rr.Preference = uint16(v.Priority)
 			case *dns.SRV:
 				rr.Hdr = hrd
-				rr.Priority = uint16(v.Prio)
+				rr.Priority = uint16(v.Priority)
 				words := strings.Fields(v.Content)
 				if i, err := strconv.Atoi(words[0]); err == nil {
 					rr.Weight = uint16(i)

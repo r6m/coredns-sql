@@ -14,6 +14,6 @@ type Record struct {
 	Type     string
 	Content  string
 	TTL      int32
-	Prio     int
+	Priority int
 	Disabled bool
 }
