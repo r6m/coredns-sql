@@ -11,14 +11,15 @@ home: "https://github.com/r6m/coredns-sql/blob/master/README.md"
 
 # sql
 
-Use [jinzhu/gorm](https://github.com/jinzhu/gorm) to handle database, support many database as gorm dose.
+Use [gorm.io/gorm](https://github.com/go-gorm/gorm) to handle database, support many database as gorm dose.
 
 ## Syntax
 
 ~~~ txt
 sql <dialect> <arg> {
     debug [db]
-    auto-migrate
+    auto_migrate
+    table_prefix dns_
 }
 ~~~
 
